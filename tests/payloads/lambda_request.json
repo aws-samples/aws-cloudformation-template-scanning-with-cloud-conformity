@@ -1,0 +1,3 @@
+{   
+  "body": "{\r\n  \"accountId\" : \"013024094748\",\r\n  \"filename\" : \"mytemplate.yml\",\r\n  \"template\" : \"AWSTemplateFormatVersion: 2010-09-09\nResources:\n  Ec2Instance:\n    Type: AWS::EC2::Instance\n    Properties:\n      InstanceType:\n        Ref: InstanceTypeParameter01\nParameters:\n  InstanceTypeParameter01:\n    Type: String\n    Default: t2.micro\n    AllowedValues:\n      - t2.micro\n      - m1.small\n      - m1.large\n\"\r\n}"
+}

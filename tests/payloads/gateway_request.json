@@ -1,0 +1,5 @@
+{
+    "accountId" : "<AWS account id from caller>",
+    "filename" : "mytemplate.yml",
+    "template" : "<stringified yaml or json cloudformation template>"
+}

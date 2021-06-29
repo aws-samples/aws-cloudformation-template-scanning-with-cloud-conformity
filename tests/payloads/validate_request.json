@@ -1,0 +1,9 @@
+{
+  "data": {
+    "attributes": {
+      "type": "cloudformation-template",
+			"account": "11J3-UWhT",
+      "contents": "---\nAWSTemplateFormatVersion: '2010-09-09'\nResources:\n  S3Bucket:\n    Type: AWS::S3::Bucket\n    Properties:\n      AccessControl: PublicRead"
+    }
+  }
+}

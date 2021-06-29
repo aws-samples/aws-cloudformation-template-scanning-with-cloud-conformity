@@ -1,0 +1,40 @@
+[    {
+  "id": "cloud-conformity-rules",
+  "description": "Results from scanning templates through Cloud Conformity",
+  "name": "VERY_HIGH",
+  "elements": [
+      {
+          "id": "ccc:AccountId:S3-001:S3:us-east-1:S3Bucket", 
+          "name": "S3 Bucket Public 'READ' Access",
+          "steps": [
+              {
+                  "result": {
+                      "status": "failed"
+                  },
+                  "name": "Bucket S3Bucket allows public 'READ' access.",
+                  "keyword": "packaged.yml: "
+              }
+          ]
+      }åç
+},
+{
+  "id": "cloud-conformity-rules-2",
+  "description": "Results from scanning templates through Cloud Conformity",
+  "name": "HIGH",
+  "elements": [
+      {
+          "id": "ccc:AccountId:S3-001:S3:us-east-1:S3Bucket222", 
+          "name": "S3 Bucket Public 'FULL_CONTROL' Access",
+          "steps": [
+              {
+                  "result": {
+                      "status": "failed"
+                  },
+                  "name": "Bucket S3Bucket allows public 'FULL_CONTROL' Access",
+                  "keyword": "packaged.yml: "
+              }
+          ]
+      }
+  ]
+}
+]

@@ -1,0 +1,836 @@
+{
+  "data": [
+    {
+      "type": "checks",
+      "id": "ccc:AccountId:S3-001:S3:us-east-1:S3Bucket",
+      "attributes": {
+        "region": "us-east-1",
+        "status": "FAILURE",
+        "risk-level": "VERY_HIGH",
+        "pretty-risk-level": "Very High",
+        "message": "Bucket S3Bucket allows public 'READ' access.",
+        "resource": "S3Bucket",
+        "descriptorType": "s3-bucket",
+        "categories": [
+          "security"
+        ],
+        "last-updated-date": null,
+        "tags": [],
+        "cost": 0,
+        "waste": 0,
+        "not-scored": false,
+        "ignored": false,
+        "rule-title": "S3 Bucket Public 'READ' Access",
+        "provider": "aws",
+        "resolution-page-url": "https://www.cloudconformity.com/knowledge-base/aws/S3/s3-bucket-public-read-access.html"
+      },
+      "relationships": {
+        "rule": {
+          "data": {
+            "type": "rules",
+            "id": "S3-001"
+          }
+        },
+        "account": {
+          "data": {
+            "type": "accounts",
+            "id": "AccountId"
+          }
+        }
+      }
+    },
+    {
+      "type": "checks",
+      "id": "ccc:AccountId:S3-002:S3:us-east-1:S3Bucket",
+      "attributes": {
+        "region": "us-east-1",
+        "status": "SUCCESS",
+        "risk-level": "VERY_HIGH",
+        "pretty-risk-level": "Very High",
+        "message": "Bucket S3Bucket does not allow public 'READ_ACP' access",
+        "resource": "S3Bucket",
+        "descriptorType": "s3-bucket",
+        "categories": [
+          "security"
+        ],
+        "last-updated-date": null,
+        "tags": [],
+        "cost": 0,
+        "waste": 0,
+        "not-scored": false,
+        "ignored": false,
+        "rule-title": "S3 Bucket Public 'READ_ACP' Access",
+        "provider": "aws",
+        "resolution-page-url": "https://www.cloudconformity.com/knowledge-base/aws/S3/s3-bucket-public-read-acp-access.html"
+      },
+      "relationships": {
+        "rule": {
+          "data": {
+            "type": "rules",
+            "id": "S3-002"
+          }
+        },
+        "account": {
+          "data": {
+            "type": "accounts",
+            "id": "AccountId"
+          }
+        }
+      }
+    },
+    {
+      "type": "checks",
+      "id": "ccc:AccountId:S3-003:S3:us-east-1:S3Bucket",
+      "attributes": {
+        "region": "us-east-1",
+        "status": "SUCCESS",
+        "risk-level": "VERY_HIGH",
+        "pretty-risk-level": "Very High",
+        "message": "Bucket S3Bucket does not allow public 'WRITE' access",
+        "resource": "S3Bucket",
+        "descriptorType": "s3-bucket",
+        "categories": [
+          "security"
+        ],
+        "last-updated-date": null,
+        "tags": [],
+        "cost": 0,
+        "waste": 0,
+        "not-scored": false,
+        "ignored": false,
+        "rule-title": "S3 Bucket Public 'WRITE' ACL Access",
+        "provider": "aws",
+        "resolution-page-url": "https://www.cloudconformity.com/knowledge-base/aws/S3/s3-bucket-public-write-access.html"
+      },
+      "relationships": {
+        "rule": {
+          "data": {
+            "type": "rules",
+            "id": "S3-003"
+          }
+        },
+        "account": {
+          "data": {
+            "type": "accounts",
+            "id": "AccountId"
+          }
+        }
+      }
+    },
+    {
+      "type": "checks",
+      "id": "ccc:AccountId:S3-004:S3:us-east-1:S3Bucket",
+      "attributes": {
+        "region": "us-east-1",
+        "status": "SUCCESS",
+        "risk-level": "VERY_HIGH",
+        "pretty-risk-level": "Very High",
+        "message": "Bucket S3Bucket does not allow public 'WRITE ACP' access",
+        "resource": "S3Bucket",
+        "descriptorType": "s3-bucket",
+        "categories": [
+          "security"
+        ],
+        "last-updated-date": null,
+        "tags": [],
+        "cost": 0,
+        "waste": 0,
+        "not-scored": false,
+        "ignored": false,
+        "rule-title": "S3 Bucket Public 'WRITE_ACP' Access",
+        "provider": "aws",
+        "resolution-page-url": "https://www.cloudconformity.com/knowledge-base/aws/S3/s3-bucket-public-write-acp-access.html"
+      },
+      "relationships": {
+        "rule": {
+          "data": {
+            "type": "rules",
+            "id": "S3-004"
+          }
+        },
+        "account": {
+          "data": {
+            "type": "accounts",
+            "id": "AccountId"
+          }
+        }
+      }
+    },
+    {
+      "type": "checks",
+      "id": "ccc:AccountId:S3-005:S3:us-east-1:S3Bucket",
+      "attributes": {
+        "region": "us-east-1",
+        "status": "SUCCESS",
+        "risk-level": "VERY_HIGH",
+        "pretty-risk-level": "Very High",
+        "message": "Bucket S3Bucket does not allow public 'FULL_CONTROL' access",
+        "resource": "S3Bucket",
+        "descriptorType": "s3-bucket",
+        "categories": [
+          "security"
+        ],
+        "last-updated-date": null,
+        "tags": [],
+        "cost": 0,
+        "waste": 0,
+        "not-scored": false,
+        "ignored": false,
+        "rule-title": "S3 Bucket Public 'FULL_CONTROL' Access",
+        "provider": "aws",
+        "resolution-page-url": "https://www.cloudconformity.com/knowledge-base/aws/S3/s3-bucket-public-full-control-access.html"
+      },
+      "relationships": {
+        "rule": {
+          "data": {
+            "type": "rules",
+            "id": "S3-005"
+          }
+        },
+        "account": {
+          "data": {
+            "type": "accounts",
+            "id": "AccountId"
+          }
+        }
+      }
+    },
+    {
+      "type": "checks",
+      "id": "ccc:AccountId:S3-006:S3:us-east-1:S3Bucket",
+      "attributes": {
+        "region": "us-east-1",
+        "status": "SUCCESS",
+        "risk-level": "VERY_HIGH",
+        "pretty-risk-level": "Very High",
+        "message": "Bucket S3Bucket does not allow authenticated users 'READ' access",
+        "resource": "S3Bucket",
+        "descriptorType": "s3-bucket",
+        "categories": [
+          "security"
+        ],
+        "last-updated-date": null,
+        "tags": [],
+        "cost": 0,
+        "waste": 0,
+        "not-scored": false,
+        "ignored": false,
+        "rule-title": "S3 Bucket Authenticated Users 'READ' Access",
+        "provider": "aws",
+        "resolution-page-url": "https://www.cloudconformity.com/knowledge-base/aws/S3/s3-bucket-authenticated-users-read-access.html"
+      },
+      "relationships": {
+        "rule": {
+          "data": {
+            "type": "rules",
+            "id": "S3-006"
+          }
+        },
+        "account": {
+          "data": {
+            "type": "accounts",
+            "id": "AccountId"
+          }
+        }
+      }
+    },
+    {
+      "type": "checks",
+      "id": "ccc:AccountId:S3-007:S3:us-east-1:S3Bucket",
+      "attributes": {
+        "region": "us-east-1",
+        "status": "SUCCESS",
+        "risk-level": "VERY_HIGH",
+        "pretty-risk-level": "Very High",
+        "message": "Bucket S3Bucket does not allow authenticated users 'READ_ACP' access",
+        "resource": "S3Bucket",
+        "descriptorType": "s3-bucket",
+        "categories": [
+          "security"
+        ],
+        "last-updated-date": null,
+        "tags": [],
+        "cost": 0,
+        "waste": 0,
+        "not-scored": false,
+        "ignored": false,
+        "rule-title": "S3 Bucket Authenticated Users 'READ_ACP' Access",
+        "provider": "aws",
+        "resolution-page-url": "https://www.cloudconformity.com/knowledge-base/aws/S3/s3-bucket-authenticated-users-read-acp-access.html"
+      },
+      "relationships": {
+        "rule": {
+          "data": {
+            "type": "rules",
+            "id": "S3-007"
+          }
+        },
+        "account": {
+          "data": {
+            "type": "accounts",
+            "id": "AccountId"
+          }
+        }
+      }
+    },
+    {
+      "type": "checks",
+      "id": "ccc:AccountId:S3-008:S3:us-east-1:S3Bucket",
+      "attributes": {
+        "region": "us-east-1",
+        "status": "SUCCESS",
+        "risk-level": "VERY_HIGH",
+        "pretty-risk-level": "Very High",
+        "message": "Bucket S3Bucket does not allow authenticated users 'WRITE' access",
+        "resource": "S3Bucket",
+        "descriptorType": "s3-bucket",
+        "categories": [
+          "security"
+        ],
+        "last-updated-date": null,
+        "tags": [],
+        "cost": 0,
+        "waste": 0,
+        "not-scored": false,
+        "ignored": false,
+        "rule-title": "S3 Bucket Authenticated Users 'WRITE' Access",
+        "provider": "aws",
+        "resolution-page-url": "https://www.cloudconformity.com/knowledge-base/aws/S3/s3-bucket-authenticated-users-write-access.html"
+      },
+      "relationships": {
+        "rule": {
+          "data": {
+            "type": "rules",
+            "id": "S3-008"
+          }
+        },
+        "account": {
+          "data": {
+            "type": "accounts",
+            "id": "AccountId"
+          }
+        }
+      }
+    },
+    {
+      "type": "checks",
+      "id": "ccc:AccountId:S3-009:S3:us-east-1:S3Bucket",
+      "attributes": {
+        "region": "us-east-1",
+        "status": "SUCCESS",
+        "risk-level": "VERY_HIGH",
+        "pretty-risk-level": "Very High",
+        "message": "Bucket S3Bucket does not allow authenticated users 'WRITE_ACP' access",
+        "resource": "S3Bucket",
+        "descriptorType": "s3-bucket",
+        "categories": [
+          "security"
+        ],
+        "last-updated-date": null,
+        "tags": [],
+        "cost": 0,
+        "waste": 0,
+        "not-scored": false,
+        "ignored": false,
+        "rule-title": "S3 Bucket Authenticated Users 'WRITE_ACP' Access",
+        "provider": "aws",
+        "resolution-page-url": "https://www.cloudconformity.com/knowledge-base/aws/S3/s3-bucket-authenticated-users-write-acp-access.html"
+      },
+      "relationships": {
+        "rule": {
+          "data": {
+            "type": "rules",
+            "id": "S3-009"
+          }
+        },
+        "account": {
+          "data": {
+            "type": "accounts",
+            "id": "AccountId"
+          }
+        }
+      }
+    },
+    {
+      "type": "checks",
+      "id": "ccc:AccountId:S3-010:S3:us-east-1:S3Bucket",
+      "attributes": {
+        "region": "us-east-1",
+        "status": "SUCCESS",
+        "risk-level": "VERY_HIGH",
+        "pretty-risk-level": "Very High",
+        "message": "Bucket S3Bucket does not allow authenticated users 'FULL_CONTROL' access",
+        "resource": "S3Bucket",
+        "descriptorType": "s3-bucket",
+        "categories": [
+          "security"
+        ],
+        "last-updated-date": null,
+        "tags": [],
+        "cost": 0,
+        "waste": 0,
+        "not-scored": false,
+        "ignored": false,
+        "rule-title": "S3 Bucket Authenticated Users 'FULL_CONTROL' Access",
+        "provider": "aws",
+        "resolution-page-url": "https://www.cloudconformity.com/knowledge-base/aws/S3/s3-bucket-authenticated-users-full-control-access.html"
+      },
+      "relationships": {
+        "rule": {
+          "data": {
+            "type": "rules",
+            "id": "S3-010"
+          }
+        },
+        "account": {
+          "data": {
+            "type": "accounts",
+            "id": "AccountId"
+          }
+        }
+      }
+    },
+    {
+      "type": "checks",
+      "id": "ccc:AccountId:S3-011:S3:us-east-1:S3Bucket",
+      "attributes": {
+        "region": "us-east-1",
+        "status": "FAILURE",
+        "risk-level": "MEDIUM",
+        "pretty-risk-level": "Medium",
+        "message": "Bucket S3Bucket doesn't have access logging enabled",
+        "resource": "S3Bucket",
+        "descriptorType": "s3-bucket",
+        "categories": [
+          "security"
+        ],
+        "last-updated-date": null,
+        "tags": [],
+        "cost": 0,
+        "waste": 0,
+        "not-scored": false,
+        "ignored": false,
+        "rule-title": "S3 Bucket Logging Enabled",
+        "provider": "aws",
+        "resolution-page-url": "https://www.cloudconformity.com/knowledge-base/aws/S3/s3-bucket-logging-enabled.html"
+      },
+      "relationships": {
+        "rule": {
+          "data": {
+            "type": "rules",
+            "id": "S3-011"
+          }
+        },
+        "account": {
+          "data": {
+            "type": "accounts",
+            "id": "AccountId"
+          }
+        }
+      }
+    },
+    {
+      "type": "checks",
+      "id": "ccc:AccountId:S3-012:S3:us-east-1:S3Bucket",
+      "attributes": {
+        "region": "us-east-1",
+        "status": "FAILURE",
+        "risk-level": "LOW",
+        "pretty-risk-level": "Low",
+        "message": "Bucket S3Bucket does not have versioning enabled",
+        "resource": "S3Bucket",
+        "descriptorType": "s3-bucket",
+        "categories": [
+          "reliability"
+        ],
+        "last-updated-date": null,
+        "tags": [],
+        "cost": 0,
+        "waste": 0,
+        "not-scored": false,
+        "ignored": false,
+        "rule-title": "S3 Bucket Versioning Enabled",
+        "provider": "aws",
+        "resolution-page-url": "https://www.cloudconformity.com/knowledge-base/aws/S3/s3-bucket-versioning-enabled.html"
+      },
+      "relationships": {
+        "rule": {
+          "data": {
+            "type": "rules",
+            "id": "S3-012"
+          }
+        },
+        "account": {
+          "data": {
+            "type": "accounts",
+            "id": "AccountId"
+          }
+        }
+      }
+    },
+    {
+      "type": "checks",
+      "id": "ccc:AccountId:S3-013:S3:us-east-1:S3Bucket",
+      "attributes": {
+        "region": "us-east-1",
+        "status": "FAILURE",
+        "risk-level": "LOW",
+        "pretty-risk-level": "Low",
+        "message": "Bucket S3Bucket configuration is MFA-Delete disabled",
+        "resource": "S3Bucket",
+        "descriptorType": "s3-bucket",
+        "categories": [
+          "security"
+        ],
+        "last-updated-date": null,
+        "tags": [],
+        "cost": 0,
+        "waste": 0,
+        "not-scored": false,
+        "ignored": false,
+        "rule-title": "S3 Bucket MFA Delete Enabled",
+        "provider": "aws",
+        "resolution-page-url": "https://www.cloudconformity.com/knowledge-base/aws/S3/s3-bucket-mfa-delete-enabled.html"
+      },
+      "relationships": {
+        "rule": {
+          "data": {
+            "type": "rules",
+            "id": "S3-013"
+          }
+        },
+        "account": {
+          "data": {
+            "type": "accounts",
+            "id": "AccountId"
+          }
+        }
+      }
+    },
+    {
+      "type": "checks",
+      "id": "ccc:AccountId:S3-016:S3:us-east-1:S3Bucket",
+      "attributes": {
+        "region": "us-east-1",
+        "status": "FAILURE",
+        "risk-level": "HIGH",
+        "pretty-risk-level": "High",
+        "message": "Bucket S3Bucket does not enforce Server-Side Encryption",
+        "resource": "S3Bucket",
+        "descriptorType": "s3-bucket",
+        "categories": [
+          "security"
+        ],
+        "last-updated-date": null,
+        "tags": [],
+        "cost": 0,
+        "waste": 0,
+        "not-scored": false,
+        "ignored": false,
+        "rule-title": "Server Side Encryption",
+        "provider": "aws",
+        "resolution-page-url": "https://www.cloudconformity.com/knowledge-base/aws/S3/server-side-encryption.html"
+      },
+      "relationships": {
+        "rule": {
+          "data": {
+            "type": "rules",
+            "id": "S3-016"
+          }
+        },
+        "account": {
+          "data": {
+            "type": "accounts",
+            "id": "AccountId"
+          }
+        }
+      }
+    },
+    {
+      "type": "checks",
+      "id": "ccc:AccountId:S3-017:S3:us-east-1:S3Bucket",
+      "attributes": {
+        "region": "us-east-1",
+        "status": "FAILURE",
+        "risk-level": "MEDIUM",
+        "pretty-risk-level": "Medium",
+        "message": "Bucket S3Bucket does not enforce SSL to secure data in transit",
+        "resource": "S3Bucket",
+        "descriptorType": "s3-bucket",
+        "categories": [
+          "security"
+        ],
+        "last-updated-date": null,
+        "tags": [],
+        "cost": 0,
+        "waste": 0,
+        "not-scored": false,
+        "ignored": false,
+        "rule-title": "Secure Transport",
+        "provider": "aws",
+        "resolution-page-url": "https://www.cloudconformity.com/knowledge-base/aws/S3/secure-transport.html"
+      },
+      "relationships": {
+        "rule": {
+          "data": {
+            "type": "rules",
+            "id": "S3-017"
+          }
+        },
+        "account": {
+          "data": {
+            "type": "accounts",
+            "id": "AccountId"
+          }
+        }
+      }
+    },
+    {
+      "type": "checks",
+      "id": "ccc:AccountId:S3-018:S3:us-east-1:S3Bucket",
+      "attributes": {
+        "region": "us-east-1",
+        "status": "SUCCESS",
+        "risk-level": "LOW",
+        "pretty-risk-level": "Low",
+        "message": "Bucket S3Bucket is using a DNS-compliant name",
+        "resource": "S3Bucket",
+        "descriptorType": "s3-bucket",
+        "categories": [
+          "performance-efficiency"
+        ],
+        "last-updated-date": null,
+        "tags": [],
+        "cost": 0,
+        "waste": 0,
+        "not-scored": false,
+        "ignored": false,
+        "rule-title": "DNS Compliant S3 Bucket Names",
+        "provider": "aws",
+        "resolution-page-url": "https://www.cloudconformity.com/knowledge-base/aws/S3/dns-compliant-buckets-names.html"
+      },
+      "relationships": {
+        "rule": {
+          "data": {
+            "type": "rules",
+            "id": "S3-018"
+          }
+        },
+        "account": {
+          "data": {
+            "type": "accounts",
+            "id": "AccountId"
+          }
+        }
+      }
+    },
+    {
+      "type": "checks",
+      "id": "ccc:AccountId:S3-020:S3:us-east-1:S3Bucket",
+      "attributes": {
+        "region": "us-east-1",
+        "status": "FAILURE",
+        "risk-level": "LOW",
+        "pretty-risk-level": "Low",
+        "message": "Bucket S3Bucket does not utilize lifecycle configurations",
+        "resource": "S3Bucket",
+        "descriptorType": "s3-bucket",
+        "categories": [
+          "security",
+          "cost-optimisation"
+        ],
+        "last-updated-date": null,
+        "tags": [],
+        "cost": 0,
+        "waste": 0,
+        "not-scored": false,
+        "ignored": false,
+        "rule-title": "S3 Buckets Lifecycle Configuration",
+        "provider": "aws",
+        "resolution-page-url": "https://www.cloudconformity.com/knowledge-base/aws/S3/lifecycle-configuration.html"
+      },
+      "relationships": {
+        "rule": {
+          "data": {
+            "type": "rules",
+            "id": "S3-020"
+          }
+        },
+        "account": {
+          "data": {
+            "type": "accounts",
+            "id": "AccountId"
+          }
+        }
+      }
+    },
+    {
+      "type": "checks",
+      "id": "ccc:AccountId:S3-021:S3:us-east-1:S3Bucket",
+      "attributes": {
+        "region": "us-east-1",
+        "status": "FAILURE",
+        "risk-level": "HIGH",
+        "pretty-risk-level": "High",
+        "message": "Bucket S3Bucket doesn't have encryption enabled",
+        "resource": "S3Bucket",
+        "descriptorType": "s3-bucket",
+        "categories": [
+          "security"
+        ],
+        "last-updated-date": null,
+        "tags": [],
+        "cost": 0,
+        "waste": 0,
+        "not-scored": false,
+        "ignored": false,
+        "rule-title": "S3 Bucket Default Encryption",
+        "provider": "aws",
+        "resolution-page-url": "https://www.cloudconformity.com/knowledge-base/aws/S3/bucket-default-encryption.html"
+      },
+      "relationships": {
+        "rule": {
+          "data": {
+            "type": "rules",
+            "id": "S3-021"
+          }
+        },
+        "account": {
+          "data": {
+            "type": "accounts",
+            "id": "AccountId"
+          }
+        }
+      }
+    },
+    {
+      "type": "checks",
+      "id": "ccc:AccountId:S3-023:S3:us-east-1:S3Bucket",
+      "attributes": {
+        "region": "us-east-1",
+        "status": "FAILURE",
+        "risk-level": "LOW",
+        "pretty-risk-level": "Low",
+        "message": "Object Lock is not enabled for S3Bucket",
+        "resource": "S3Bucket",
+        "descriptorType": "s3-bucket",
+        "categories": [
+          "security"
+        ],
+        "last-updated-date": null,
+        "tags": [],
+        "cost": 0,
+        "waste": 0,
+        "not-scored": false,
+        "ignored": false,
+        "rule-title": "S3 Object Lock",
+        "provider": "aws",
+        "resolution-page-url": "https://www.cloudconformity.com/knowledge-base/aws/S3/object-lock.html"
+      },
+      "relationships": {
+        "rule": {
+          "data": {
+            "type": "rules",
+            "id": "S3-023"
+          }
+        },
+        "account": {
+          "data": {
+            "type": "accounts",
+            "id": "AccountId"
+          }
+        }
+      }
+    },
+    {
+      "type": "checks",
+      "id": "ccc:AccountId:S3-024:S3:us-east-1:S3Bucket",
+      "attributes": {
+        "region": "us-east-1",
+        "status": "FAILURE",
+        "risk-level": "LOW",
+        "pretty-risk-level": "Low",
+        "message": "Transfer Acceleration is not enabled for S3Bucket",
+        "resource": "S3Bucket",
+        "descriptorType": "s3-bucket",
+        "categories": [
+          "performance-efficiency"
+        ],
+        "last-updated-date": null,
+        "tags": [],
+        "cost": 0,
+        "waste": 0,
+        "not-scored": false,
+        "ignored": false,
+        "rule-title": "S3 Transfer Acceleration",
+        "provider": "aws",
+        "resolution-page-url": "https://www.cloudconformity.com/knowledge-base/aws/S3/transfer-acceleration.html"
+      },
+      "relationships": {
+        "rule": {
+          "data": {
+            "type": "rules",
+            "id": "S3-024"
+          }
+        },
+        "account": {
+          "data": {
+            "type": "accounts",
+            "id": "AccountId"
+          }
+        }
+      }
+    },
+    {
+      "type": "checks",
+      "id": "ccc:AccountId:S3-026:S3:global:S3Bucket",
+      "attributes": {
+        "region": "global",
+        "status": "FAILURE",
+        "risk-level": "VERY_HIGH",
+        "pretty-risk-level": "Very High",
+        "message": "s3-bucket S3Bucket does not have S3 Block Public Access feature enabled.",
+        "resource": "S3Bucket",
+        "descriptorType": "s3-bucket",
+        "categories": [
+          "security"
+        ],
+        "last-updated-date": null,
+        "extradata": [
+          {
+            "label": "LocationConstraint",
+            "name": "LocationConstraint",
+            "value": "us-east-1",
+            "type": "META"
+          }
+        ],
+        "tags": [],
+        "cost": 0,
+        "waste": 0,
+        "not-scored": false,
+        "ignored": false,
+        "rule-title": "Enable S3 Block Public Access for S3 Buckets",
+        "provider": "aws",
+        "resolution-page-url": "https://www.cloudconformity.com/knowledge-base/aws/S3/bucket-public-access-block.html"
+      },
+      "relationships": {
+        "rule": {
+          "data": {
+            "type": "rules",
+            "id": "S3-026"
+          }
+        },
+        "account": {
+          "data": {
+            "type": "accounts",
+            "id": "AccountId"
+          }
+        }
+      }
+    }
+  ],
+  "meta": {
+    "missingParameters": [],
+    "errors": []
+  }
+}

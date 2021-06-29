@@ -1,0 +1,61 @@
+{
+  "data": [
+    {
+      "type": "accounts",
+      "id": "Eas6c59rr",
+      "attributes": {
+        "name": "AWS_ACC_01",
+        "environment": "DEV",
+        "awsaccount-id": "010120201234",
+        "security-package": true,
+        "created-date": 1558918437370,
+        "last-notified-date": 1621157467900,
+        "last-checked-date": 1621157467040,
+        "last-monitoring-event-date": 1616490125000,
+        "access": "NONE",
+        "tags": [
+          "DEV"
+        ],
+        "cloud-type": "aws",
+        "managed-group-id": "SDgB4cgx6n"
+      },
+      "relationships": {
+        "organisation": {
+          "data": {
+            "type": "organisations",
+            "id": "S43Ggf2fFs"
+          }
+        }
+      }
+    },
+    {
+      "type": "accounts",
+      "id": "Das6c59zz",
+      "attributes": {
+        "name": "AWS_ACC_02",
+        "environment": "PROD",
+        "awsaccount-id": "313123231234",
+        "security-package": true,
+        "created-date": 1558918437370,
+        "last-notified-date": 1621157467900,
+        "last-checked-date": 1621157467040,
+        "last-monitoring-event-date": 1616490125000,
+        "access": "NONE",
+        "tags": [
+          "PROD"
+        ],
+        "cloud-type": "aws",
+        "managed-group-id": "AGgB65gf3s"
+      },
+      "relationships": {
+        "organisation": {
+          "data": {
+            "type": "organisations",
+            "id": "Z54Ggf2fFs"
+          }
+        }
+      }
+    }
+  ]
+}
+ 

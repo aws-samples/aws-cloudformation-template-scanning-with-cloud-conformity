@@ -1,0 +1,9 @@
+ version=0.1
+
+[default.global.parameters]
+capabilities = "CAPABILITY_NAMED_IAM"
+
+[default.deploy.parameters]
+parameter_overrides = "Stage=\"dev\" CreateVPCEndpoint=\"true\" ExistingApiVPCEndpointId=\"N/A\" VpcIdParameter=\"vpc-12345\" VpcEndpointAllowedCIDRRange=\"172.31.0.0/16\" VpcEndpointSubnetIdsParameter=\"subnet-abcdef,subnet-ghijkl,subnet-mnopqr\""
+region = "ap-southeast-2"
+

@@ -1,0 +1,314 @@
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: MIT-0
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: >
+  Example CodePipeline which has a validate CodeBuild phase scanning an example template.
+
+Parameters:
+  SSMValidateAPIURLKey:
+    Description: The SSM parameter store key containing the VPC endpoint API URL for the private validate API endpoint. 
+    Type: String
+    Default: /CodeBuild/validate-api-url/dev
+  SSMValidateHostKey:
+    Description: The SSM parameter store key containing the private API endpoint used as Host header in call to VPC endpoint. 
+    Type: String
+    Default: /CodeBuild/validate-host/dev
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: VpcId of your existing Virtual Private Cloud (VPC)
+    ConstraintDescription: Must be the VPC Id of an existing Virtual Private Cloud.
+    Default: vpc-8773f1e0
+  SubnetId:
+    Type: AWS::EC2::Subnet::Id
+    Description: A subnet id in your Virtual Private Cloud (VPC)
+    ConstraintDescription: This should be residing in the selected Virtual Private Cloud.
+    Default: subnet-08cc94008a00c2706
+  SecurityGroupId:
+    Type: AWS::EC2::SecurityGroup::Id
+    Description: The VPC default security group (unless you choose a better one)
+    Default: sg-d66512af
+
+Resources:
+
+  CodePipelineServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub 'CodePipelineServiceRole-${AWS::StackName}'
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - sts:AssumeRole
+            Principal:
+              Service:
+                - codepipeline.amazonaws.com
+      Policies:
+        - PolicyName: !Sub 'CodePipelineServicePolicy-${AWS::StackName}'
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: "arn:aws:logs:*:*:*"
+              - Effect: Allow
+                Action:
+                  - s3:*
+                  # - s3:GetObject
+                  # - s3:GetObjectVersion
+                  # - s3:GetBucketPolicy
+                  # - s3:PutObject
+                Resource:
+                  - !Sub "arn:aws:s3:::${DeploymentArtifactBucket}"
+                  - !Sub "arn:aws:s3:::${DeploymentArtifactBucket}/*"
+              - Effect: Allow
+                Action:
+                  - codebuild:BatchGetBuilds
+                  - codebuild:StartBuild
+                  - codebuild:StopBuild
+                  - codebuild:CreateReportGroup
+                Resource:
+                  - !GetAtt ValidateCodeBuildProject.Arn
+              - Effect: Allow
+                Action:
+                  - codecommit:GetBranch
+                  - codecommit:GetCommit
+                  - codecommit:UploadArchive
+                  - codecommit:GetUploadArchiveStatus 
+                  - codecommit:CancelUploadArchive
+                Resource: !GetAtt DemoRepo.Arn
+
+
+  CodeBuildServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub 'CodeBuildServiceRole-${AWS::StackName}'
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - sts:AssumeRole
+            Principal:
+              Service:
+                - codebuild.amazonaws.com
+      Policies:
+        - PolicyName: !Sub 'CodeBuildServicePolicy-${AWS::StackName}'
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: "arn:aws:logs:*:*:*"
+              - Effect: Allow
+                Action:
+                  - ssm:GetParameters
+                Resource:
+                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter${SSMValidateAPIURLKey}"
+                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter${SSMValidateHostKey}"
+              # the following ec2 actions are required because the project will run inside the VPC
+              - Effect: Allow
+                Action:
+                  - ec2:CreateNetworkInterface
+                  - ec2:DescribeDhcpOptions
+                  - ec2:DescribeNetworkInterfaces
+                  - ec2:DeleteNetworkInterface
+                  - ec2:DescribeSubnets
+                  - ec2:DescribeSecurityGroups
+                  - ec2:DescribeVpcs
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - ec2:CreateNetworkInterfacePermission
+                Resource: !Sub "arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:network-interface/*"
+                Condition:
+                  StringLike:
+                    ec2:Subnet:
+                      - !Sub "arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:subnet/${SubnetId}"
+                    ec2:AuthorizedService: codebuild.amazonaws.com
+
+  DeploymentArtifactBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Delete
+    Properties:
+      AccessControl: Private
+      VersioningConfiguration:
+        Status: Enabled
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+
+  DeploymentArtifactBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref DeploymentArtifactBucket
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Action:
+              - s3:*
+            Resource:
+              - !Sub "arn:aws:s3:::${DeploymentArtifactBucket}"
+              - !Sub "arn:aws:s3:::${DeploymentArtifactBucket}/*"
+            Principal:
+              AWS:
+                - !GetAtt CodeBuildServiceRole.Arn
+          
+  ValidateCodeBuildProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      ServiceRole: !Ref CodeBuildServiceRole
+      Artifacts:
+        Type: CODEPIPELINE
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/amazonlinux2-x86_64-standard:3.0
+      VpcConfig:
+        SecurityGroupIds: 
+          - !Ref SecurityGroupId
+        Subnets: 
+          - !Ref SubnetId
+        VpcId: !Ref VpcId
+      Source:
+        Type: CODEPIPELINE
+        BuildSpec: |
+          version: 0.2
+          env:
+            variables:
+              CFN_PATH: build/
+            parameter-store:
+              VALIDATE_API_URL: /CodeBuild/validate-api-url/dev
+              VALIDATE_HOST_HEADER: /CodeBuild/validate-host/dev
+          phases:
+            install:
+              runtime-versions:
+                python: '3.8'
+            build:
+              commands: 
+                - |
+                  #!bin/bash
+                  set -e
+                  ls -al build
+
+                  cat << EOF > pyscript.py
+                  #!/usr/bin/python
+                  import os
+                  import urllib3
+                  import json
+                  import boto3
+                  import re
+                  from pathlib import Path
+
+                  http = urllib3.PoolManager()
+                  url = os.environ['VALIDATE_API_URL']
+                  hostHeader = os.environ['VALIDATE_HOST_HEADER']
+
+                  accountId = re.search(r'arn:aws:codebuild:[a-z0-9-]+:(\d{12}):build', os.environ['CODEBUILD_BUILD_ARN']).group(1)
+
+                  templates = []
+                  failuresFound = 0
+                  folder = os.environ['CFN_PATH']
+                  with os.scandir(os.environ['CFN_PATH']) as it:
+                      for entry in it:
+                          print(entry.name, entry.path)
+                          if entry.name.endswith(".yml") or entry.name.endswith(".yaml") or entry.name.endswith(".template") or entry.name.endswith(".json") and entry.is_file():
+                              cfn = Path(entry.path).read_text()
+                              templates.append( { 'template': cfn, 'filename': entry.name } )
+
+                  payload = { 'accountId': accountId, 'templates': templates, 'filename': entry.name }
+                  try:
+                      resp = http.request("POST", url, headers={'Content-Type':'application/json', 'Host':hostHeader}, body=json.dumps(payload), timeout=10.0)
+                  except urllib3.exceptions.NewConnectionError:
+                      print(f'Connection failed to {url}')
+
+                  rawResp = resp.data.decode('utf-8')
+                  print(f'Raw response from Validate API:\n{rawResp}')
+
+                  if (resp.status != 200):
+                      print(f'Validate API returned {resp.status}, marking as failure. Ask QCP team to investigate')
+                      print(rawResp)
+                      exit(255)
+
+                  responseObj = json.loads(resp.data.decode('utf-8'))
+                  results = []
+                  results.extend(json.loads(responseObj['results']))
+                  with open('results.json', 'w') as f:
+                      json.dump(results, f)
+
+                  if (int(responseObj['failures']['VERY_HIGH']) > 0):
+                      exit(255)
+
+                  EOF
+                  
+                  python3 pyscript.py
+                  
+                  echo after script
+                  ls -al
+                  cat results.json
+          artifacts:
+            files:
+              - build/**
+          reports:
+            cloudConformityReportGroup:
+              files:
+                - 'results.json'
+              file-format: CUCUMBERJSON 
+          
+      TimeoutInMinutes: 5
+
+  DemoRepo:
+    Type: AWS::CodeCommit::Repository
+    Properties:
+      RepositoryName: MyDemoRepo
+      RepositoryDescription: This is a repository for CodePipeline ExampleCodePipelineWithTemplateValidationPhase.
+
+  ExampleCodePipeline:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      Name: ExampleCodePipelineWithTemplateValidationPhase
+      RoleArn: !GetAtt CodePipelineServiceRole.Arn
+      ArtifactStore:
+        Type: S3
+        Location: !Ref DeploymentArtifactBucket
+      Stages:
+        - Name: Source
+          Actions:
+            - Name: SourceAction
+              ActionTypeId:
+                Category: Source
+                Owner: AWS
+                Version: "1"
+                Provider: CodeCommit  
+              OutputArtifacts:
+                - Name: SourceArtifact
+              Configuration:
+                BranchName: main
+                RepositoryName: !GetAtt DemoRepo.Name
+                PollForSourceChanges: true
+              RunOrder: 1
+        - Name: Validate
+          Actions:
+            - Name: CodeBuild
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Version: '1'
+                Provider: CodeBuild
+              InputArtifacts:
+                - Name: SourceArtifact
+              OutputArtifacts:
+                - Name: ValidatedBuildOutputArtifact
+              Configuration:
+                ProjectName: !Ref ValidateCodeBuildProject
+              RunOrder: 2

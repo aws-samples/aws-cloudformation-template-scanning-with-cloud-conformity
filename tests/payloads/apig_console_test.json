@@ -1,0 +1,27 @@
+# Copy paste these examples into the Amazon API Gateway console to test the endpoints directly
+
+# /validate 
+{
+  "accountId": "0123456789",
+  "templates": [
+    {
+      "template": "---\nAWSTemplateFormatVersion: '2010-09-09'\nResources:\n  S3Bucket:\n    Type: AWS::S3::Bucket\n    Properties:\n      AccessControl: PublicRead",
+      "filename": "mytemplate.yml"
+    }
+  ]
+}
+
+# /exceptions
+
+# POST
+[
+  {
+    "awsAccountId": "111122223333",
+    "filename": "1.yml",
+    "ruleId": "S3-013",
+    "requestReason": "Cyber is ok with this bucket not having MFA delete enabled",
+    "requestedBy": "J Doe"
+  }
+]
+
+# Approve
