@@ -2,6 +2,9 @@
 
 Approve an existing exception request to exempt from any future template scan results
 
+Note this does not interface with Cloud Conformity itself - the exceptions are stored in an internal database, not in Cloud Conformity itself. Having an appoved exception using this solution will not stop the check from failing if deployed into an AWS account scanned by Cloud Conformity.
+
+
 **URL** : `/exceptions`
 
 **Method** : `PUT`
