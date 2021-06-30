@@ -174,10 +174,11 @@ class TestLambdaFunctions(TestCase):
         self.table.delete()
         return super().tearDown()
 
+    @mock_secretsmanager
     def test_lambda_handler__valid_account(self):
 
         event = {
-            "body": "{ \"accountId\" : \"012345678923\", \"templates\": [ {\r\n  \r\n  \"filename\" : \"mytemplate.yml\",\r\n  \"template\" : \"---\nAWSTemplateFormatVersion: '2010-09-09'\nResources:\n  S3Bucket:\n    Type: AWS::S3::Bucket\n    Properties:\n      AccessControl: PublicRead\"\r\n} ] }"
+            "body": "{ \"accountId\" : \"INVALID_ACC_ID\", \"templates\": [ {\r\n  \r\n  \"filename\" : \"mytemplate.yml\",\r\n  \"template\" : \"---\nAWSTemplateFormatVersion: '2010-09-09'\nResources:\n  S3Bucket:\n    Type: AWS::S3::Bucket\n    Properties:\n      AccessControl: PublicRead\"\r\n} ] }"
         }
 
         with requests_mock.Mocker() as mock_request:
@@ -202,13 +203,13 @@ class TestLambdaFunctions(TestCase):
             mock_request.get("https://ap-southeast-2-api.cloudconformity.com/v1/accounts", text=self.responseAccounts)
             mock_request.post("https://ap-southeast-2-api.cloudconformity.com/v1/template-scanner/scan", text=self.responseCCTemplateScannerAPI)
             actual_response = invoke_validate_handler(event, self.dynamodb)
-     
+
         print("actual_response: " + json.dumps(actual_response, indent=2))
         response_body = json.loads(actual_response["body"], strict=False)
         self.assertEqual(actual_response['statusCode'], 200)
 
         # One extra failure, where account is invalid
-        self.assertEqual(response_body["failures"]["VERY_HIGH"], 12)
+        self.assertEqual(response_body["failures"]["VERY_HIGH"], 3)
 
     def test_lambda_handler__high_risk_template(self):
 
@@ -224,7 +225,7 @@ class TestLambdaFunctions(TestCase):
 
         response_body = json.loads(actual_response["body"], strict=False)
 
-        self.assertEqual(response_body["failures"]["VERY_HIGH"], 11)
+        self.assertEqual(response_body["failures"]["VERY_HIGH"], 2)
 
     # # When there is no accountId field in the request
     # # Then there is a VERY_HIGH failure returned, in addition to usual template scans
@@ -244,7 +245,7 @@ class TestLambdaFunctions(TestCase):
 
         response_body = json.loads(actual_response["body"], strict=False)
 
-        self.assertEqual(response_body["failures"]["VERY_HIGH"], 12)
+        self.assertEqual(response_body["failures"]["VERY_HIGH"], 3)
 
     # When there is no accountId field in the request
     # Then there is a VERY_HIGH failure returned, in addition to usual template scans
@@ -264,7 +265,7 @@ class TestLambdaFunctions(TestCase):
 
         response_body = json.loads(actual_response["body"], strict=False)
 
-        self.assertEqual(response_body["failures"]["VERY_HIGH"], 11)
+        self.assertEqual(response_body["failures"]["VERY_HIGH"], 2)
         self.assertEqual(response_body["failures"]["HIGH"], 2)
         self.assertEqual(response_body["failures"]["MEDIUM"], 2)
         self.assertEqual(response_body["failures"]["LOW"], 6)
@@ -276,7 +277,7 @@ class TestLambdaFunctions(TestCase):
         event = {
             "body": """{ \"accountId\" : \"010120201234\",
                        \"templates\": [ {\r\n  \r\n  \"filename\" : \"1.yml\",\r\n  \"template\" : \"---\nAWSTemplateFormatVersion: '2010-09-09'\nResources:\n  S3Bucket:\n    Type: AWS::S3::Bucket\n    Properties:\n      AccessControl: PublicRead\"\r\n},
-                                        {\r\n  \r\n  \"filename\" : \"2.yml\",\r\n  \"template\" : \"---\nAWSTemplateFormatVersion: '2010-09-09'\nResources:\n  S3Bucket:\n    Type: AWS::S3::Bucket\n    Properties:\n      AccessControl: PublicRead\"\r\n} 
+                                        {\r\n  \r\n  \"filename\" : \"2.yml\",\r\n  \"template\" : \"---\nAWSTemplateFormatVersion: '2010-09-09'\nResources:\n  S3Bucket:\n    Type: AWS::S3::Bucket\n    Properties:\n      AccessControl: PublicRead\"\r\n}
                                       ] }"""
         }
 
@@ -290,7 +291,7 @@ class TestLambdaFunctions(TestCase):
 
         response_body = json.loads(actual_response["body"], strict=False)
 
-        self.assertEqual(response_body["failures"]["VERY_HIGH"], 22)
+        self.assertEqual(response_body["failures"]["VERY_HIGH"], 4)
         self.assertEqual(response_body["failures"]["HIGH"], 4)
         self.assertEqual(response_body["failures"]["MEDIUM"], 4)
         self.assertEqual(response_body["failures"]["LOW"], 12)
@@ -310,4 +311,3 @@ class TestLambdaFunctions(TestCase):
 
         self.assertEqual(actual_response['statusCode'], 500)
         self.assertEqual(actual_response['body'], '{"message": "Invalid JSON provided in request"}')
-

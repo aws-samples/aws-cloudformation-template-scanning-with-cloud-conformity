@@ -88,7 +88,7 @@ def get_cloud_conformity_headers() -> Dict[str, str]:
 def get_scan_result(payload: Dict[str, Any]) -> Any:
     """
     Calls the CloudConformity Template Scanner API with 'payload'
-    :param payload: JSON object as defined in https://cloudone.trendmicro.com/docs/conformity/api-reference/tag/Template-scanner 
+    :param payload: JSON object as defined in https://cloudone.trendmicro.com/docs/conformity/api-reference/tag/Template-scanner
     :return: requests.Response object (https://docs.python-requests.org/en/latest/api/#requests.Response)
              Actual results from CloudConformity API call are in respone.text
     """
@@ -115,8 +115,8 @@ def populate_accounts_list() -> None:
     logger.info('populate_accounts_list()')
     try:
         global ACCOUNTS_LIST
-
-        accountsUrl = "https://ap-southeast-2-api.cloudconformity.com/v1/accounts"
+        region_name = os.environ['AWS_REGION']
+        accountsUrl = f'https://{region_name}-api.cloudconformity.com/v1/accounts'
 
         resp = requests.get(accountsUrl,
                             headers=get_cloud_conformity_headers())
@@ -141,7 +141,7 @@ def populate_accounts_list() -> None:
 def search_accounts(awsAccount: str) -> str:
     """
     Given an AWS account number, this function looks up the corresponding CloudConformity account number
-    using the global var ACCOUNTS_LIST. 
+    using the global var ACCOUNTS_LIST.
     :returns: CloudConformity account number (as string), or empty string if not found.
     """
     logger.info(f'search_accounts({awsAccount})')
@@ -156,7 +156,7 @@ def search_accounts(awsAccount: str) -> str:
 
 def get_account(awsAccount: str) -> str:
     """
-    Searches global ACCOUNTS_LIST for AWS Account ID, returning CloudConformity account ID if 
+    Searches global ACCOUNTS_LIST for AWS Account ID, returning CloudConformity account ID if
     present. If ACCOUNTS_LIST is empty, will make call to populate from CloudConformity.
     """
     logger.info(f'get_account({awsAccount})')
@@ -242,8 +242,11 @@ def lambda_handler(event: Dict[str, Any], context: Dict[str, Any], dynamodb=None
             "MEDIUM": 0,
             "LOW": 0
         }
+
         for riskLevel in reversed(list(failuresList.keys())):
-            failuresCount[riskLevel] = int(len(failuresList[riskLevel]['elements']))
+            for check in failuresList[riskLevel]['elements']:
+                if (check['steps'][0]['result']['status'] == "failed"):
+                    failuresCount[riskLevel] += 1
             results.append(failuresList[riskLevel])
 
         logger.debug('failuresCount: ' + json.dumps(failuresCount, indent=2))
@@ -254,7 +257,7 @@ def lambda_handler(event: Dict[str, Any], context: Dict[str, Any], dynamodb=None
 
         return_response = {
             "statusCode": 200,
-            "body":  json.dumps({'failures': failuresCount, 'results': cucumberResults})
+            "body": json.dumps({'failures': failuresCount, 'results': cucumberResults})
         }
         logger.debug(f'return_response: {json.dumps(return_response, indent=2)}')
 
@@ -295,7 +298,7 @@ def extract_account(body: Dict[str, Any], failuresList: Dict[str, Any]) -> str:
     else:
         addTestResult('cloud-conformity-tests',
                       'AWS account number validation',
-                      'VERY_HIGH', 'AWS account number not provided as accountID in POST body',
+                      'VERY_HIGH', 'AWS account number not provided as accountID in POST body to validate API',
                       '', 'failed', failuresList)
 
     return ccAccount
@@ -304,13 +307,13 @@ def extract_account(body: Dict[str, Any], failuresList: Dict[str, Any]) -> str:
 def scan_template(filename: str, failuresList, cc_account_id: str, cfn_template: str, exceptionList: Dict[str, Any]) -> None:
 
     payload = {
-            'data': {
-                'attributes': {
-                    'type': 'cloudformation-template',
-                    'contents': cfn_template
-                }
+        'data': {
+            'attributes': {
+                'type': 'cloudformation-template',
+                'contents': cfn_template
             }
         }
+    }
 
     if (cc_account_id != ''):
         payload['data']['attributes']['account'] = cc_account_id
@@ -325,8 +328,17 @@ def scan_template(filename: str, failuresList, cc_account_id: str, cfn_template:
         addTestResult('cloud-conformity-tests',
                       'CloudConformity Response Error', 'VERY_HIGH',
                       f'CloudConformity replied with {resp.status_code} error: {details}',
-                      '', 'failed', failuresList)
+                      filename, 'failed', failuresList)
     processScanResults(resp.text, filename, failuresList, exceptionList)
+
+
+def convertStatus(status: str) -> str:
+    if (status == 'SUCCESS'):
+        return 'passed'
+    elif (status == 'FAILURE'):
+        return 'failed'
+    else:
+        return status
 
 
 def processScanResults(ccResults: str, filename: str, tests: Dict[str, Any], exceptionList: Dict[str, Any]) -> None:
@@ -337,25 +349,20 @@ def processScanResults(ccResults: str, filename: str, tests: Dict[str, Any], exc
         for check in resultsObj["data"]:
             ruleId = check['relationships']['rule']['data']['id']
             message = check['attributes']['message']
+            status = check['attributes']['status']
             # Check to see if any failed checks are OK because on exception list
             if (f'{filename}#{ruleId}' in exceptionList):
                 rule = check['attributes']['message']
                 logger.debug(f'Rule {rule} passed as there is an approved exception')
-                addTestResult(check['id'],
-                              check['attributes']['rule-title'],
-                              'EXEMPTED',
-                              f'{ruleId}: {message}',
-                              filename,
-                              'skipped',
-                              tests)
-            else:
-                addTestResult(check['id'],
-                              check['attributes']['rule-title'],
-                              check['attributes']['risk-level'],
-                              f'{ruleId}: {message}',
-                              filename,
-                              'failed',
-                              tests)
+                status = 'skipped'
+
+            addTestResult(check['id'],
+                          check['attributes']['rule-title'],
+                          check['attributes']['risk-level'],
+                          f'{ruleId}: {message}',
+                          filename,
+                          status,
+                          tests)
 
         # If 'tests' is empty means we are good to go
         if (len(tests) == 0):
@@ -381,7 +388,9 @@ def addTestResult(
         filename: str,
         status: str,
         resultsArray: Dict[str, Any]):
-    logger.debug(f'Adding failed test with message: {message}')
+    logger.debug(f'Adding test {status} with message: {message}')
+
+    status = convertStatus(status)
 
     # TODO add error handling
     if (riskLevel in FAILURE_FILTER or riskLevel == "PASSED" or riskLevel == "EXEMPTED"):
