@@ -1,4 +1,4 @@
-# A centralized API solution for AWS CloudFormation template scanning - with Trend's Cloud One Conformity 
+# A central wrapper API solution for AWS CloudFormation template scanning using Trend's Cloud One Conformity 
 
 Integrating AWS CloudFormation template scanning into CI/CD pipelines is a perfect way to always catch security infringements before deployments occur. However, when the scanning tools used are external to the organization, such as [Trend Micro's Cloud One Conformity](https://www.trendmicro.com/en_au/business/products/hybrid-cloud/cloud-one-conformity.html) (formerly Cloud Conformity), implementing and enforcing this in a multi team, multi account environment can present some challenges.
 
