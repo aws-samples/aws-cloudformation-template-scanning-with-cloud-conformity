@@ -1,9 +1,9 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
 Description: >
-  Example template with security vulnerabilities. 
+  Example template with security vulnerabilities. DO NOT ACTUALLY DEPLOY! Example only!
 Resources:
-  OpenBucket:
+  ExampleBucket:
     Type: AWS::S3::Bucket
     Properties:
       AccessControl: PublicRead
