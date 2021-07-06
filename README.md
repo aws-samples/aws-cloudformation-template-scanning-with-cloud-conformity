@@ -2,19 +2,31 @@
 
 Integrating AWS CloudFormation template scanning into CI/CD pipelines is a perfect way to always catch security infringements before deployments occur. However, when the scanning tools used are external to the organization, such as [Trend Micro's Cloud One Conformity](https://www.trendmicro.com/en_au/business/products/hybrid-cloud/cloud-one-conformity.html) (formerly Cloud Conformity), implementing and enforcing this in a multi team, multi account environment can present some challenges.
 
-This solution allows for using the [CloudConformity Template Scanner API](https://github.com/cloudconformity/documentation-api/blob/master/TemplateScanner.md) in your AWS CodePipeline. AWS CodeBuild will fail if any submitted templates return failed checks, and results are presented using [CodeBuild reports](https://docs.aws.amazon.com/codebuild/latest/userguide/test-reporting.html) feature 
+This solution allows for using the [Cloud Conformity Template Scanner API](https://github.com/cloudconformity/documentation-api/blob/master/TemplateScanner.md) in your AWS CodePipeline. AWS CodeBuild will fail if any submitted templates return failed checks, and results are presented using [CodeBuild reports](https://docs.aws.amazon.com/codebuild/latest/userguide/test-reporting.html) feature 
 
-![Architecture Diagram](./docs/CodeBuildTestReport.png)
+## Wrapper API features
+
+The wrapper API (henceforce called the Validate API, as it is used in pipelines to validate AWS CloudFormation templates) adds extra functionality when compared to the Cloud Conformity Template Scanner API:
+
+1. Send multiple templates at once, within a single POST
+2. Checks that the AWS account is currently being monitored by Cloud Conformity
+   * If it is not being monitored, a VERY HIGH failing check is added to the test results
+3. Returns the results in Cucumber JSON, a format supported by AWS CodeBuild reports.
+
+
 
 ## Architecture
 
-This codebase will create a private API endpoint which can be used within your CI/CD pipeline CodeBuild job to submit AWS CloudFormation templates to it. The API will then use the Cloud Conformity Template Scanner API to perform vulnerability scans upon the cloudformation. By using the API caller's AWS account number, you can be sure that the checks performed are exactly the same as the Cloud Conformity real time scanning running against the destination account. 
+![Architecture Diagram](./docs/ArchDiag.png)
+
+
+This codebase will create a private API endpoint which can be used within your CI/CD pipeline AWS CodeBuild job to submit AWS CloudFormation templates to it. The API will then use the Cloud Conformity Template Scanner API to perform vulnerability scans upon the cloudformation. By using the API caller's AWS account number, you can be sure that the checks performed are exactly the same as the Cloud Conformity real time scanning running against the destination account. 
 
 Results from the API are returned in Cucumber JSON format, to enable easy viewing as part of CodeBuild test reports. 
 
 A suggested CodeBuild buildspec file is also [included as part of this repository](./validate.buildspec.yml), to enable use within CodePipeline straight away.
 
-![Architecture Diagram](./docs/ArchDiag.png)
+![Architecture Diagram](./docs/CodeBuildTestReport.png)
 
 ### API endpoints provided
 
@@ -93,9 +105,9 @@ More information on Test Reporting inside AWS CodeBuild is available [here](http
 The buildspec file to be used is also contained within this repo:
 - [validate.buildspec.yml](./validate.buildspec.yml)
 
-This CodeBuild can then be used in AWS CodePipeline, as per the Validate stage in diagram below:
+This AWS CodeBuild project can then be used in AWS CodePipeline, as per the Validate stage in diagram below. The call to the Validate API remains internal to the AWS network, utilising the VPC Interface Endpoint for Amazon API Gateway (called `execute-api`) attached to the VPC that the validate project uses.
 
-![CodePipeline example](./docs/CodePipelineExample.jpg)
+![CodePipeline example](./docs/CodePipelineExample.png)
 
 ### Test using example CodePipeline
 
@@ -143,7 +155,7 @@ The full report can be viewed through the Console:
 
 You can now see all the Cloud Conformity errors relating to the template which was committed to the repository. 
 
-![CodeBuildReport](./docs/report.png)
+![CodeBuildReport](./docs/CodeBuildTestReport.png)
 
 In real life, this template can be the output of another *Build* CodeBuild stage, or another location within your repository.
 
