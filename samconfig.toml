@@ -4,11 +4,5 @@
 capabilities = "CAPABILITY_NAMED_IAM"
 
 [default.deploy.parameters]
-parameter_overrides = "Stage=\"dev\" CreateVPCEndpoint=\"true\" ExistingApiVPCEndpointId=\"N/A\" VpcIdParameter=\"vpc-8773f1e0\" VpcEndpointAllowedCIDRRange=\"172.31.0.0/16\" VpcEndpointSubnetIdsParameter=\"subnet-83985ddb,subnet-0889f941,subnet-a35a1cc4\""
+parameter_overrides = "Stage=\"dev\" CreateVPCEndpoint=\"true\" ExistingApiVPCEndpointId=\"N/A\" VpcIdParameter=\"vpc-12345\" VpcEndpointAllowedCIDRRange=\"172.31.0.0/16\" VpcEndpointSubnetIdsParameter=\"subnet-abcdef,subnet-ghijkl,subnet-mnopqr\""
 region = "ap-southeast-2"
-stack_name = "validate-api-dev1"
-s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-k9mkdjw1aws0"
-s3_prefix = "validate-api-dev1"
-profile = "isg-dev"
-confirm_changeset = true
-
