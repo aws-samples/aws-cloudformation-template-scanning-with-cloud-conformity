@@ -45,6 +45,10 @@ A suggested CodeBuild buildspec file is also [included as part of this repositor
 ![CodeBuild test report](./docs/CodeBuildTestReport.png)
 
 
+The AWS account number of the calling account is required. This is then checked against the list of accounts being monitored by Conformity in the organisation. If the account is not being monitored, this is treated as a very high failure (and should be rectified as soon as possible). See below for an example of this in action:
+
+![CodeBuild test report](./docs/AccountNotMonitored.png)
+
 
 ## Installation
 
@@ -54,8 +58,7 @@ For ease of deployment, the architecture has been wrapped into an [AWS SAM](http
 
 - [SAM CLI installed](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
 - [AWS CLI installed](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html), and credentials set for the account to deploy to
-- S3 bucket available to store SAM build artifacts
-- Cloud Conformity account (to obtain API key, see below)
+- Trend Cloud One Conformity account (in order to obtain API key, see below)
 
 ### Deployment via SAM
 
@@ -77,11 +80,7 @@ Build and Deploy:
   ```
 - Next, deploy the app: 
   ```bash
-  sam deploy 
-    --stack-name validation-api \
-    --capabilities CAPABILITY_NAMED_IAM \
-    --region <aws-region> \
-    --s3-bucket <s3-bucket>
+  sam deploy -g
   ```
 
 ### Obtain Conformity API key
@@ -176,6 +175,16 @@ When configuring CodeBuild, to ensure it can access the private API gateway, it 
 | git-codecommit |
 | logs |
 | s3 (gateway endpoint) |
+
+## Cleanup
+
+To remove all resources created by this repository, and to ensure no ongoing charges are billed to your account, perform the following steps.
+
+In the AWS console:
+- Navigate to the AWS CloudFormation service
+- Delete the stack called `test-validate-pipeline`
+- Delete the stack for the SAM application (name was provoded during the `sam deploy` command earlier)
+- (optional) If you created any VPC endpoints for the example pipeline, navigate to the VPC service and delete them.
 
 ## Development
 
