@@ -45,7 +45,7 @@ A suggested CodeBuild buildspec file is also [included as part of this repositor
 ![CodeBuild test report](./docs/CodeBuildTestReport.png)
 
 
-The AWS account number of the calling account is required. This is then checked against the list of accounts being monitored by Conformity in the organisation. If the account is not being monitored, this is treated as a very high failure (and should be rectified as soon as possible). See below for an example of this in action:
+The AWS account number of the calling account is required in the POST to the validate API (this is done automatically in the [provided buildspec file](./validate.buildspec.yml)). This is used to check against the list of accounts being monitored by Conformity in the organisation. If the account is not being monitored, this is treated as a very high failure (and should be rectified as soon as possible). See below for an example of this in action:
 
 ![CodeBuild test report](./docs/AccountNotMonitored.png)
 
