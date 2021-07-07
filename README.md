@@ -1,4 +1,7 @@
-# A central wrapper API solution for AWS CloudFormation template scanning using Trend's Cloud One Conformity 
+# Integrate Cloud Conformity scanning into enterprise CICD pipelines
+## A central wrapper API solution for AWS CloudFormation template scanning
+
+(This repo accompanies an AWS DevOps blog entitled [Enforcing AWS CloudFormation scanning in CI/CD Pipelines at scale using Trend Micro Cloud One Conformity](https://aws.amazon.com/blogs/devops/cloudformation-scanning-cicd-pipeline-cloud-conformity/). It is recommended reading to give in depth context to the solution)
 
 Integrating AWS CloudFormation template scanning into CI/CD pipelines is a perfect way to always catch security infringements before deployments occur. However, when the scanning tools used are external to the organization, such as [Trend Micro's Cloud One Conformity](https://www.trendmicro.com/en_au/business/products/hybrid-cloud/cloud-one-conformity.html) (formerly Cloud Conformity), implementing and enforcing this in a multi team, multi account environment can present some challenges.
 
@@ -6,7 +9,7 @@ This solution allows for using the [Cloud Conformity Template Scanner API](https
 
 ## Wrapper API features
 
-The wrapper API (henceforce called the Validate API, as it is used in pipelines to validate AWS CloudFormation templates) adds extra functionality when compared to the Cloud Conformity Template Scanner API:
+The wrapper API (called the Validate API in this solution, as it is used in pipelines to validate AWS CloudFormation templates) adds extra functionality when compared to the Cloud Conformity Template Scanner API directly:
 
 1. Send multiple templates at once, within a single POST
 2. Checks that the AWS account is currently being monitored by Cloud Conformity
@@ -27,14 +30,14 @@ has permissions to access.
 
 ## Architecture
 
-The top half of the architecture diagram below depicts the main solution that this repositority contains. The bottom half of the diagram depicts a typical usage scenraio for a team's CI/CD pipeline to use the validate API.
+The top half of the architecture diagram below depicts the main solution that this repository contains. The bottom half of the diagram depicts a typical usage scenario for a team's CI/CD pipeline to use the validate API.
 
-An AWS CodeBuild project and AWS CodePipeline are also provided for an end to end example, and are dicussed with full install instructions later in the readme. (see section [Test using example CodePipeline](#test-using-example-CodePipeline))
+An AWS CodeBuild project and AWS CodePipeline are also provided for an end-to-end example, and are discussed with full install instructions later in the readme. (see section [Test using example CodePipeline](#test-using-example-CodePipeline))
 
 ![CodePipeline example](./docs/CodePipelineExample.png)
 
 
-This codebase will create a private API endpoint which can be used within your CI/CD pipeline AWS CodeBuild job to submit AWS CloudFormation templates to it. The API will then use the Cloud Conformity Template Scanner API to perform vulnerability scans upon the cloudformation. By using the API caller's AWS account number, you can be sure that the checks performed are exactly the same as the Cloud Conformity real time scanning running against the destination account. 
+This codebase will create a private API endpoint which can be used within your CI/CD pipeline AWS CodeBuild job to submit AWS CloudFormation templates to it. The API will then use the Cloud Conformity Template Scanner API to perform vulnerability scans upon the AWS Cloudformation templates. By using the API caller's AWS account number, you can be sure that the checks performed are exactly the same as the Cloud Conformity real time scanning running against the destination account. 
 
 Results from the API are returned in Cucumber JSON format, to enable easy viewing as part of CodeBuild test reports. 
 
@@ -53,7 +56,7 @@ For ease of deployment, the architecture has been wrapped into an [AWS SAM](http
 - [SAM CLI installed](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
 - [AWS CLI installed](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html), and credentials set for the account to deploy to
 - S3 bucket available to store SAM build artifacts
-- CloudConformity account (to obtain API key, see below)
+- Cloud Conformity account (to obtain API key, see below)
 
 ### Deployment via SAM
 
@@ -115,7 +118,7 @@ This AWS CodeBuild project can then be used in AWS CodePipeline, as per the Vali
 
 ### Test using example CodePipeline
 
-Whilst the above diagram shows a typical multi account and full CI/CD pipeline, for the purposes of testing a simpler environment is provided within this repository. This can be used to test the SAM validate-api deployment, and also show how the CodeBuild validate stage can be used within CodePipeline. 
+Whilst the above diagram shows a typical multi account and full CI/CD pipeline, for the purposes of testing a simpler environment is provided within this repository. This can be used to test the SAM validate-api deployment, and show how the CodeBuild validate stage can be used within CodePipeline. 
 
 The stack is defined in [example-codepipeline.yaml](./example-codepipeline.yaml).
 
@@ -123,7 +126,7 @@ The stack is defined in [example-codepipeline.yaml](./example-codepipeline.yaml)
 
 ![Example CodePipeline Architecture](./docs/ExampleCodePipelineArch.jpg)
 
-This stack is a AWS CloudFormation stack and can be quickly launched through the Console. 
+This stack is an AWS CloudFormation stack and can be quickly launched through the Console. 
 
 As CodeBuild is running inside a VPC (to be able to access the private validate API), you will need to choose a VPC, Subnet and Security Group. The default VPC security group is suggested, as only outbound access is required. See "Notes on AWS CodeBuild inside VPC" section below for further information.
 
@@ -138,7 +141,7 @@ aws cloudformation deploy \
 
 #### Triggering the CodePipeline
 
-This stack will create a CodeCommit repository, and the CodePipeline will trigger on a commit to that repository. The repository is currently empty, so we need to add a file. The following command will add a CloudFormation template which defines an open S3 bucket. **NOTE** this stack and the S3 bucket within it will **not** get created in your account. It will only be picked up by CodePipeline and passed to the "Validate" CodeBuild stage, simulating your teams' CI/CD pipelines.
+This stack will create aa AWS CodeCommit repository, and the CodePipeline will trigger on a commit to that repository. The repository is currently empty, so we need to add a file. The following command will add a CloudFormation template which defines an open S3 bucket. **NOTE** this stack and the S3 bucket within it will **not** get created in your account. It will only be picked up by CodePipeline and passed to the "Validate" CodeBuild stage, simulating your teams' CI/CD pipelines.
 
 ```
 aws codecommit put-file --repository-name MyDemoRepo --branch-name main --file-content fileb://tests/payloads/openS3bucket.yaml --file-path build/openS3bucket.yaml --name "J Doe" --email "jdoe@example.com" --commit-message "commit to trigger pipeline"
@@ -165,7 +168,7 @@ In real life, this template can be the output of another *Build* CodeBuild stage
 
 ### Notes on CodeBuild inside VPC
 
-When configuring CodeBuild, to ensure it is able to access the private API gateway, it needs to be VPC attached. When choosing a subnet to place CodeBuild within, ensure that the private subnet has internet access via NAT gateway **OR** the following VPC endpoints are configured:
+When configuring CodeBuild, to ensure it can access the private API gateway, it needs to be VPC attached. When choosing a subnet to place CodeBuild within, ensure that the private subnet has internet access via NAT gateway **OR** the following VPC endpoints are configured:
 
 | Required VPC Endpoints |
 | -------------|
@@ -177,7 +180,7 @@ When configuring CodeBuild, to ensure it is able to access the private API gatew
 
 ## Development
 
-This repository is provided as a working base for you to use within your own projects. If you have enchancements or bug fixes that will benefit future users of this code, please do raise an issue, or preferably a pull request. 
+This repository is provided as a working base for you to use within your own projects. If you have enhancements or bug fixes that will benefit future users of this code, please do raise an issue, or preferably a pull request. 
 
 ### Tests
 
