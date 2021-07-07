@@ -17,7 +17,11 @@ The wrapper API (henceforce called the Validate API, as it is used in pipelines 
 
 ## Architecture
 
-![Architecture Diagram](./docs/ArchDiag.png)
+The top half of the architecture diagram below depicts the main solution that this repositority contains. The bottom half of the diagram depicts a typical usage scenraio for a team's CI/CD pipeline to use the validate API.
+
+An AWS CodeBuild project and AWS CodePipeline are also provided for an end to end example, and are dicussed with full install instructions later in the readme. (see section [Test using example CodePipeline](#test-using-example-CodePipeline))
+
+![CodePipeline example](./docs/CodePipelineExample.png)
 
 
 This codebase will create a private API endpoint which can be used within your CI/CD pipeline AWS CodeBuild job to submit AWS CloudFormation templates to it. The API will then use the Cloud Conformity Template Scanner API to perform vulnerability scans upon the cloudformation. By using the API caller's AWS account number, you can be sure that the checks performed are exactly the same as the Cloud Conformity real time scanning running against the destination account. 
@@ -26,7 +30,7 @@ Results from the API are returned in Cucumber JSON format, to enable easy viewin
 
 A suggested CodeBuild buildspec file is also [included as part of this repository](./validate.buildspec.yml), to enable use within CodePipeline straight away.
 
-![Architecture Diagram](./docs/CodeBuildTestReport.png)
+![CodeBuild test report](./docs/CodeBuildTestReport.png)
 
 ### API endpoints provided
 
@@ -107,7 +111,7 @@ The buildspec file to be used is also contained within this repo:
 
 This AWS CodeBuild project can then be used in AWS CodePipeline, as per the Validate stage in diagram below. The call to the Validate API remains internal to the AWS network, utilising the VPC Interface Endpoint for Amazon API Gateway (called `execute-api`) attached to the VPC that the validate project uses.
 
-![CodePipeline example](./docs/CodePipelineExample.png)
+
 
 ### Test using example CodePipeline
 
