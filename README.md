@@ -1,12 +1,11 @@
 # Integrate Cloud Conformity scanning into enterprise CICD pipelines
-## A central wrapper API solution for AWS CloudFormation template scanning
-
-(This repo accompanies an AWS DevOps blog entitled [Enforcing AWS CloudFormation scanning in CI/CD Pipelines at scale using Trend Micro Cloud One Conformity](https://aws.amazon.com/blogs/devops/cloudformation-scanning-cicd-pipeline-cloud-conformity/). It is recommended reading to give in depth context to the solution)
+## A wrapper API solution for use within AWS CodeBuild and AWS CodePipeline
 
 Integrating AWS CloudFormation template scanning into CI/CD pipelines is a perfect way to always catch security infringements before deployments occur. However, when the scanning tools used are external to the organization, such as [Trend Micro's Cloud One Conformity](https://www.trendmicro.com/en_au/business/products/hybrid-cloud/cloud-one-conformity.html) (formerly Cloud Conformity), implementing and enforcing this in a multi team, multi account environment can present some challenges.
 
 This solution allows for using the [Cloud Conformity Template Scanner API](https://github.com/cloudconformity/documentation-api/blob/master/TemplateScanner.md) in your AWS CodePipeline. AWS CodeBuild will fail if any submitted templates return failed checks, and results are presented using [CodeBuild reports](https://docs.aws.amazon.com/codebuild/latest/userguide/test-reporting.html) feature 
 
+**NOTE:** This repo accompanies an AWS DevOps blog entitled [Enforcing AWS CloudFormation scanning in CI/CD Pipelines at scale using Trend Micro Cloud One Conformity](https://aws.amazon.com/blogs/devops/cloudformation-scanning-cicd-pipeline-cloud-conformity/). This is recommended reading to give in depth context to the solution provided in this repository
 ## Wrapper API features
 
 The wrapper API (called the Validate API in this solution, as it is used in pipelines to validate AWS CloudFormation templates) adds extra functionality when compared to the Cloud Conformity Template Scanner API directly:
