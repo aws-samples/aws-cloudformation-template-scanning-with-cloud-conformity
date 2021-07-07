@@ -13,6 +13,16 @@ The wrapper API (henceforce called the Validate API, as it is used in pipelines 
    * If it is not being monitored, a VERY HIGH failing check is added to the test results
 3. Returns the results in Cucumber JSON, a format supported by AWS CodeBuild reports.
 
+### API endpoints provided
+
+Endpoints for viewing and manipulating the Accounts that the Authenticated User
+has permissions to access.
+
+* [Scan templates with Cloud Conformity](docs/validate.post.md) : `POST /validate/`
+* [Request exception to a failing check](docs/exceptions.post.md) : `POST /exceptions/`
+* [Approve an exception request](docs/exceptions.put.md) : `PUT /exceptions/`
+* [Delete an exception](docs/exceptions.md) : `DELETE /exceptions/`
+* [List exceptions](docs.exceptions.md) : `GET /exceptions/`
 
 
 ## Architecture
@@ -32,16 +42,6 @@ A suggested CodeBuild buildspec file is also [included as part of this repositor
 
 ![CodeBuild test report](./docs/CodeBuildTestReport.png)
 
-### API endpoints provided
-
-Endpoints for viewing and manipulating the Accounts that the Authenticated User
-has permissions to access.
-
-* [Scan templates with Cloud Conformity](docs/validate.post.md) : `POST /validate/`
-* [Request exception to a failing check](docs/exceptions.post.md) : `POST /exceptions/`
-* [Approve an exception request](docs/exceptions.put.md) : `PUT /exceptions/`
-* [Delete an exception](docs/exceptions.md) : `DELETE /exceptions/`
-* [List exceptions](docs.exceptions.md) : `GET /exceptions/`
 
 
 ## Installation
