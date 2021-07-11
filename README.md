@@ -56,9 +56,12 @@ For ease of deployment, the architecture has been wrapped into an [AWS SAM](http
 
 ### Pre-requisites
 
-- [SAM CLI installed](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
-- [AWS CLI installed](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html), and credentials set for the account to deploy to
-- Trend Cloud One Conformity account (in order to obtain API key, see below)
+* [SAM CLI installed](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
+* [AWS CLI installed](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) (with credentials set for the account to deploy to)
+* CloudConformity account:
+  * [30-day free trial of Cloud One](http://cloudone.trendmicro.com/trial) (no credit card required)
+  * Free tier of Cloud One – Conformity on the [AWS Marketplace Cloud One listing](https://aws.amazon.com/marketplace/pp/prodview-g232pyu6l55l4)
+
 
 ### Deployment via SAM
 
@@ -185,6 +188,15 @@ In the AWS console:
 - Delete the stack called `test-validate-pipeline`
 - Delete the stack for the SAM application (name was provoded during the `sam deploy` command earlier)
 - (optional) If you created any VPC endpoints for the example pipeline, navigate to the VPC service and delete them.
+
+## Trend Micro / Cloud Conformity links
+
+For more information on Trend Micro / Cloud Conformity, use the links below.
+* Try for free: [30-day free trial of Cloud One](http://cloudone.trendmicro.com/trial) (no credit card required) or via the free Cloud One – Conformity tier on the [AWS Marketplace Cloud One listing](https://aws.amazon.com/marketplace/pp/prodview-g232pyu6l55l4)
+* [Overview of Cloud One - Conformity](https://www.trendmicro.com/en_au/business/products/hybrid-cloud/cloud-one-conformity.html)
+* [Conformity’s Template Scanner Documentation](https://www.cloudconformity.com/help/template-scanner.html)
+* [Conformity’s Template Scanner API reference](https://cloudone.trendmicro.com/docs/conformity/api-reference/tag/Template-scanner/)
+
 
 ## Development
 
